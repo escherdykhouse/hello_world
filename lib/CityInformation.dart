@@ -24,7 +24,7 @@ class CityInfoArgs {
 
 class CityInformationScreen extends StatefulWidget {
 
-  String commentTextFieldText = "";
+  final String commentTextFieldText = "";
 
   @override
   _CityInformationScreenState createState() => _CityInformationScreenState();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'CityInformation.dart';
+import 'AddCity.dart';
 
 void main() => runApp(MainApp());
 
@@ -16,6 +17,7 @@ class MainApp extends StatelessWidget {
         home: HomeWidget(),
         routes: <String, WidgetBuilder>{
           "/infoScreen": (BuildContext context) => CityInformationScreen(),
+          "/addScreen": (BuildContext context) => AddCityPage(),
         },
         theme: ThemeData(
           primaryColor: Colors.deepPurple,
@@ -124,7 +126,9 @@ class HomeWidget extends StatelessWidget {
             )),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).pushNamed("/addScreen");
+        },
         backgroundColor: Colors.deepPurple,
         child: Icon(Icons.add),
       ),
