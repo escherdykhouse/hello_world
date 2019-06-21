@@ -95,7 +95,6 @@ class _CityInformationScreenState extends State<CityInformationScreen> {
                           children: [
                             Expanded(
                                 child: TextField(
-                                  cursorColor: Colors.deepPurple,
                                   controller: controller,
                                   onChanged: (String text) {
                                     this.widget.commentTextFieldText = text;
@@ -106,8 +105,7 @@ class _CityInformationScreenState extends State<CityInformationScreen> {
                                   },
                             )),
                             FlatButton(
-                              child: Text("Post",
-                                  style: TextStyle(color: Colors.deepPurple)),
+                              child: Text("Post"),
                               onPressed: () {
                                 this.setState(() {
                                   addComment(this.widget.commentTextFieldText);

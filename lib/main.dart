@@ -4,23 +4,36 @@ import 'CityInformation.dart';
 
 void main() => runApp(MainApp());
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   static const String _title = 'Eschers Hello World';
+
+  @override
+  _MainAppState createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+
+  bool isDarkModeEnabled = false;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: _title,
-        home: HomeWidget(),
+        title: MainApp._title,
+        home: HomeWidget(isDarkModeEnabled,(newValue) {
+          this.setState(() {
+            this.isDarkModeEnabled = newValue;
+          });
+        }),
         routes: <String, WidgetBuilder>{
           "/infoScreen": (BuildContext context) => CityInformationScreen(),
         },
-        theme: ThemeData(
+        theme: (!isDarkModeEnabled) ? ThemeData(
           primaryColor: Colors.deepPurple,
           secondaryHeaderColor: Colors.deepPurpleAccent,
           accentColor: Colors.deepPurpleAccent,
           buttonColor: Colors.deepPurple,
-        ));
+          cursorColor: Colors.deepPurpleAccent,
+        ) : ThemeData.dark());
   }
 }
 
@@ -63,9 +76,21 @@ List<CustomCardView> cityArgsToCards(List<CityInfoArgs> infoArgs) {
   return cards;
 }
 
-class HomeWidget extends StatelessWidget {
+class HomeWidget extends StatefulWidget {
+
+  Function darkModeCallback;
+  bool darkModeValue;
+
+  HomeWidget(this.darkModeValue,this.darkModeCallback);
+
+  @override
+  _HomeWidgetState createState() => _HomeWidgetState();
+}
+
+class _HomeWidgetState extends State<HomeWidget> {
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Hello World"),
@@ -90,14 +115,20 @@ class HomeWidget extends StatelessWidget {
             child: Stack(
               children: [
                 Container(
+                  color: this.widget.darkModeValue ? Colors.black87 : Colors.white,
                     padding: EdgeInsets.only(top: 80), child: ListView(
                   children: <Widget>[
                     ListTile(
                       title: Text("Dark Mode"),
                       subtitle: Text("Use switch to toggle"),
                       trailing: Switch(
-                        value: false,
-                        onChanged: (bool value) {},
+                        value: this.widget.darkModeValue,
+                        onChanged: (bool value) {
+                          setState(() {
+                            this.widget.darkModeValue = value;
+                            this.widget.darkModeCallback(value);
+                          });
+                        },
                       ),
                     )
                   ],
@@ -123,7 +154,6 @@ class HomeWidget extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        backgroundColor: Colors.deepPurple,
         child: Icon(Icons.add),
       ),
     );
