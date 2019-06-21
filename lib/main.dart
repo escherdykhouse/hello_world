@@ -67,7 +67,12 @@ List<CustomCardView> cityArgsToCards(List<CityInfoArgs> infoArgs) {
   return cards;
 }
 
-class HomeWidget extends StatelessWidget {
+class HomeWidget extends StatefulWidget {
+  @override
+  _HomeWidgetState createState() => _HomeWidgetState();
+}
+
+class _HomeWidgetState extends State<HomeWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,37 +80,43 @@ class HomeWidget extends StatelessWidget {
         title: Text("Hello World"),
       ),
       body: ListView(
-        padding: const EdgeInsets.only(top: 16, bottom: 16.0),
-        children: <Widget>[
-              Container(
-                height: 75,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  padding: EdgeInsets.only(left: 8, right: 8),
-                  children: new List.generate(12, (i) => RoundRowItem()),
-                ),
+          padding: const EdgeInsets.only(top: 16, bottom: 16.0),
+          children: <Widget>[
+            Container(
+              height: 75,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.only(left: 8, right: 8),
+                children: new List.generate(12, (i) => RoundRowItem()),
               ),
-            ] +
-            cityArgsToCards(cities),
-      ),
+            ),
+            ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: cities.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return CustomCardView(cities[index]);
+                })
+          ]),
       drawer: Drawer(
         child: Container(
             color: Colors.white,
             child: Stack(
               children: [
                 Container(
-                    padding: EdgeInsets.only(top: 80), child: ListView(
-                  children: <Widget>[
-                    ListTile(
-                      title: Text("Dark Mode"),
-                      subtitle: Text("Use switch to toggle"),
-                      trailing: Switch(
-                        value: false,
-                        onChanged: (bool value) {},
-                      ),
-                    )
-                  ],
-                )),
+                    padding: EdgeInsets.only(top: 80),
+                    child: ListView(
+                      children: <Widget>[
+                        ListTile(
+                          title: Text("Dark Mode"),
+                          subtitle: Text("Use switch to toggle"),
+                          trailing: Switch(
+                            value: false,
+                            onChanged: (bool value) {},
+                          ),
+                        )
+                      ],
+                    )),
                 Container(color: Colors.deepPurple, height: 100),
                 Container(
                     padding: EdgeInsets.only(top: 24),
@@ -126,8 +137,14 @@ class HomeWidget extends StatelessWidget {
             )),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).pushNamed("/addScreen");
+        onPressed: () async {
+          dynamic newCity = await Navigator.of(context).pushNamed("/addScreen");
+          if (newCity.city != null) {
+            CityInfoArgs city = newCity;
+            this.setState(() {
+              cities.add(city);
+            });
+          }
         },
         backgroundColor: Colors.deepPurple,
         child: Icon(Icons.add),
@@ -205,7 +222,6 @@ class _RoundRowItemState extends State<RoundRowItem> {
                 style: BorderStyle.solid,
               )),
           child: FlatButton(onPressed: () {
-            print("clicked something");
             showDialog(
               context: context,
               builder: (BuildContext context) {

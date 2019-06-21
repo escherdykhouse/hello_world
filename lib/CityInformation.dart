@@ -7,13 +7,13 @@ class Comment {
 }
 
 class CityInfoArgs {
-  final String city;
-  final String state;
-  final String imageURL;
-  final String country;
-  final List<Comment> comments;
+  String city;
+  String state;
+  String imageURL;
+  String country;
+  List<Comment> comments;
 
-  const CityInfoArgs({
+  CityInfoArgs({
     this.city,
     this.state,
     this.imageURL,
