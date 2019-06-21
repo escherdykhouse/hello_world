@@ -23,14 +23,14 @@ class CityInfoArgs {
 }
 
 class CityInformationScreen extends StatefulWidget {
-
-  final String commentTextFieldText = "";
-
   @override
   _CityInformationScreenState createState() => _CityInformationScreenState();
 }
 
 class _CityInformationScreenState extends State<CityInformationScreen> {
+
+  String commentTextFieldText = "";
+
   @override
   Widget build(BuildContext context) {
     final CityInfoArgs args = ModalRoute.of(context).settings.arguments;
@@ -98,10 +98,10 @@ class _CityInformationScreenState extends State<CityInformationScreen> {
                                   cursorColor: Colors.deepPurple,
                                   controller: controller,
                                   onChanged: (String text) {
-                                    this.widget.commentTextFieldText = text;
+                                    this.commentTextFieldText = text;
                                   },
                                   onSubmitted: (String text) {
-                                    addComment(this.widget.commentTextFieldText);
+                                    addComment(this.commentTextFieldText);
                                     controller.clear();
                                   },
                             )),
@@ -110,7 +110,7 @@ class _CityInformationScreenState extends State<CityInformationScreen> {
                                   style: TextStyle(color: Colors.deepPurple)),
                               onPressed: () {
                                 this.setState(() {
-                                  addComment(this.widget.commentTextFieldText);
+                                  addComment(this.commentTextFieldText);
                                   controller.clear();
                                 });
                               },
