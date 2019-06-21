@@ -12,14 +12,13 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
-
   bool isDarkModeEnabled = false;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         title: MainApp._title,
-        home: HomeWidget(isDarkModeEnabled,(newValue) {
+        home: HomeWidget(isDarkModeEnabled, (newValue) {
           this.setState(() {
             this.isDarkModeEnabled = newValue;
           });
@@ -27,13 +26,15 @@ class _MainAppState extends State<MainApp> {
         routes: <String, WidgetBuilder>{
           "/infoScreen": (BuildContext context) => CityInformationScreen(),
         },
-        theme: (!isDarkModeEnabled) ? ThemeData(
-          primaryColor: Colors.deepPurple,
-          secondaryHeaderColor: Colors.deepPurpleAccent,
-          accentColor: Colors.deepPurpleAccent,
-          buttonColor: Colors.deepPurple,
-          cursorColor: Colors.deepPurpleAccent,
-        ) : ThemeData.dark());
+        theme: (!isDarkModeEnabled)
+            ? ThemeData(
+                primaryColor: Colors.deepPurple,
+                secondaryHeaderColor: Colors.deepPurpleAccent,
+                accentColor: Colors.deepPurpleAccent,
+                buttonColor: Colors.deepPurple,
+                cursorColor: Colors.deepPurpleAccent,
+              )
+            : ThemeData.dark());
   }
 }
 
@@ -77,11 +78,10 @@ List<CustomCardView> cityArgsToCards(List<CityInfoArgs> infoArgs) {
 }
 
 class HomeWidget extends StatefulWidget {
-
   Function darkModeCallback;
   bool darkModeValue;
 
-  HomeWidget(this.darkModeValue,this.darkModeCallback);
+  HomeWidget(this.darkModeValue, this.darkModeCallback);
 
   @override
   _HomeWidgetState createState() => _HomeWidgetState();
@@ -90,7 +90,6 @@ class HomeWidget extends StatefulWidget {
 class _HomeWidgetState extends State<HomeWidget> {
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Hello World"),
@@ -115,24 +114,35 @@ class _HomeWidgetState extends State<HomeWidget> {
             child: Stack(
               children: [
                 Container(
-                  color: this.widget.darkModeValue ? Colors.black87 : Colors.white,
-                    padding: EdgeInsets.only(top: 80), child: ListView(
-                  children: <Widget>[
-                    ListTile(
-                      title: Text("Dark Mode"),
-                      subtitle: Text("Use switch to toggle"),
-                      trailing: Switch(
-                        value: this.widget.darkModeValue,
-                        onChanged: (bool value) {
-                          setState(() {
-                            this.widget.darkModeValue = value;
-                            this.widget.darkModeCallback(value);
-                          });
-                        },
-                      ),
-                    )
-                  ],
-                )),
+                    color: this.widget.darkModeValue
+                        ? Colors.black87
+                        : Colors.white,
+                    padding: EdgeInsets.only(top: 80),
+                    child: ListView(
+                      children: <Widget>[
+                        ListTile(
+                          title: Text("Dark Mode"),
+                          subtitle: Text("Use switch to toggle"),
+                          trailing: Switch(
+                            value: this.widget.darkModeValue,
+                            onChanged: (bool value) {
+                              setState(() {
+                                this.widget.darkModeValue = value;
+                                this.widget.darkModeCallback(value);
+                              });
+                            },
+                          ),
+                        ),
+                        ListTile(
+                          onTap: () {
+                            showLicensePage(context: context);
+                          },
+                          title: Text("About this app"),
+                          subtitle: Text("Default About Pane"),
+                          trailing: Icon(Icons.arrow_forward_ios),
+                        )
+                      ],
+                    )),
                 Container(color: Colors.deepPurple, height: 100),
                 Container(
                     padding: EdgeInsets.only(top: 24),
