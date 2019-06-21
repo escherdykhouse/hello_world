@@ -7,24 +7,39 @@ void main() => runApp(MainApp());
 
 //Testing Github File Changes
 
-class MainApp extends StatelessWidget {
+
+class MainApp extends StatefulWidget {
   static const String _title = 'Eschers Hello World';
+
+  @override
+  _MainAppState createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  bool isDarkModeEnabled = false;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: _title,
-        home: HomeWidget(),
+        title: MainApp._title,
+        home: HomeWidget(isDarkModeEnabled, (newValue) {
+          this.setState(() {
+            this.isDarkModeEnabled = newValue;
+          });
+        }),
         routes: <String, WidgetBuilder>{
           "/infoScreen": (BuildContext context) => CityInformationScreen(),
           "/addScreen": (BuildContext context) => AddCityPage(),
         },
-        theme: ThemeData(
-          primaryColor: Colors.deepPurple,
-          secondaryHeaderColor: Colors.deepPurpleAccent,
-          accentColor: Colors.deepPurpleAccent,
-          buttonColor: Colors.deepPurple,
-        ));
+        theme: (!isDarkModeEnabled)
+            ? ThemeData(
+                primaryColor: Colors.deepPurple,
+                secondaryHeaderColor: Colors.deepPurpleAccent,
+                accentColor: Colors.deepPurpleAccent,
+                buttonColor: Colors.deepPurple,
+                cursorColor: Colors.deepPurpleAccent,
+              )
+            : ThemeData.dark());
   }
 }
 
@@ -68,6 +83,12 @@ List<CustomCardView> cityArgsToCards(List<CityInfoArgs> infoArgs) {
 }
 
 class HomeWidget extends StatefulWidget {
+
+  Function darkModeCallback;
+  bool darkModeValue;
+
+  HomeWidget(this.darkModeValue, this.darkModeCallback);
+
   @override
   _HomeWidgetState createState() => _HomeWidgetState();
 }
@@ -104,6 +125,9 @@ class _HomeWidgetState extends State<HomeWidget> {
             child: Stack(
               children: [
                 Container(
+                    color: this.widget.darkModeValue
+                        ? Colors.black87
+                        : Colors.white,
                     padding: EdgeInsets.only(top: 80),
                     child: ListView(
                       children: <Widget>[
@@ -111,9 +135,22 @@ class _HomeWidgetState extends State<HomeWidget> {
                           title: Text("Dark Mode"),
                           subtitle: Text("Use switch to toggle"),
                           trailing: Switch(
-                            value: false,
-                            onChanged: (bool value) {},
+                            value: this.widget.darkModeValue,
+                            onChanged: (bool value) {
+                              setState(() {
+                                this.widget.darkModeValue = value;
+                                this.widget.darkModeCallback(value);
+                              });
+                            },
                           ),
+                        ),
+                        ListTile(
+                          onTap: () {
+                            showLicensePage(context: context);
+                          },
+                          title: Text("About this app"),
+                          subtitle: Text("Default About Pane"),
+                          trailing: Icon(Icons.arrow_forward_ios),
                         )
                       ],
                     )),
