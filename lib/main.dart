@@ -176,7 +176,7 @@ class _HomeWidgetState extends State<HomeWidget> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           dynamic newCity = await Navigator.of(context).pushNamed("/addScreen");
-          if (newCity.city != null) {
+          if (newCity != null) {
             CityInfoArgs city = newCity;
             this.setState(() {
               cities.add(city);
